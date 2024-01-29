@@ -78,22 +78,21 @@ public class NettyServerHandler extends SimpleChannelInboundHandler<Message> {
                     new TypeReference<LoginPack>() {
                     }.getType());
 
-            SetAndSaveChannel(ctx, loginPack, msg);
+            setAndSaveChannel(ctx, loginPack, msg);
             // 将channel存起来
 
-            // Redis map
-            // create session
             RedissonClient redissonClient = RedisManager.getRedissonClient();
 
             // put session to redis
-            RMap<String, String> map = putSessionToRedis(redissonClient, msg, loginPack);
+            putSessionToRedis(redissonClient, msg, loginPack);
+
             // put NioSocketChannel to map
             SessionSocketHolder
                     .put(msg.getMessageHeader().getAppId()
                             , loginPack.getUserId(),
                             msg.getMessageHeader().getClientType(), msg.getMessageHeader().getImei(), (NioSocketChannel) ctx.channel());
 
-            PublishUserClientDtoToRedis(msg, loginPack, redissonClient);
+            publishUserClientDtoToRedis(msg, loginPack, redissonClient);
 
             UserStatusChangeNotifyPack userStatusChangeNotifyPack = new UserStatusChangeNotifyPack();
             userStatusChangeNotifyPack.setAppId(msg.getMessageHeader().getAppId());
@@ -162,7 +161,7 @@ public class NettyServerHandler extends SimpleChannelInboundHandler<Message> {
 
     }
 
-    private void PublishUserClientDtoToRedis(Message msg, LoginPack loginPack, RedissonClient redissonClient) {
+    private void publishUserClientDtoToRedis(Message msg, LoginPack loginPack, RedissonClient redissonClient) {
         UserClientDto dto = new UserClientDto();
         dto.setImei(msg.getMessageHeader().getImei());
         dto.setUserId(loginPack.getUserId());
@@ -172,7 +171,7 @@ public class NettyServerHandler extends SimpleChannelInboundHandler<Message> {
         topic.publish(JSONObject.toJSONString(dto));
     }
 
-    private void SetAndSaveChannel(ChannelHandlerContext ctx, LoginPack loginPack, Message msg) {
+    private void setAndSaveChannel(ChannelHandlerContext ctx, LoginPack loginPack, Message msg) {
         /** 登陸事件 **/
         String userId = loginPack.getUserId();
         /** 为channel设置用户id **/
