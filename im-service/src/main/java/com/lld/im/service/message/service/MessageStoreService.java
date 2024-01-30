@@ -75,7 +75,7 @@ public class MessageStoreService {
         dto.setMessageContent(messageContent);
         dto.setMessageBody(imMessageBodyEntity);
         messageContent.setMessageKey(imMessageBodyEntity.getMessageKey());
-        rabbitTemplate.convertAndSend(Constants.RabbitConstants.StoreP2PMessage,"",
+        rabbitTemplate.convertAndSend(Constants.RabbitConstants.STORE_P2P_MESSAGE,"",
                 JSONObject.toJSONString(dto));
     }
 
@@ -118,7 +118,7 @@ public class MessageStoreService {
         DoStoreGroupMessageDto dto = new DoStoreGroupMessageDto();
         dto.setMessageBody(imMessageBody);
         dto.setGroupChatMessageContent(messageContent);
-        rabbitTemplate.convertAndSend(Constants.RabbitConstants.StoreGroupMessage,
+        rabbitTemplate.convertAndSend(Constants.RabbitConstants.STORE_GROUP_MESSAGE,
                 "",
                 JSONObject.toJSONString(dto));
         messageContent.setMessageKey(imMessageBody.getMessageKey());
@@ -136,14 +136,14 @@ public class MessageStoreService {
 
     public void setMessageFromMessageIdCache(Integer appId,String messageId,Object messageContent){
         //appid : cache : messageId
-        String key =appId + ":" + Constants.RedisConstants.cacheMessage + ":" + messageId;
+        String key =appId + ":" + Constants.RedisConstants.CACHE_MESSAGE + ":" + messageId;
         stringRedisTemplate.opsForValue().set(key,JSONObject.toJSONString(messageContent),300, TimeUnit.SECONDS);
     }
 
     public <T> T getMessageFromMessageIdCache(Integer appId,
                                               String messageId,Class<T> clazz){
         //appid : cache : messageId
-        String key = appId + ":" + Constants.RedisConstants.cacheMessage + ":" + messageId;
+        String key = appId + ":" + Constants.RedisConstants.CACHE_MESSAGE + ":" + messageId;
         String msg = stringRedisTemplate.opsForValue().get(key);
         if(StringUtils.isBlank(msg)){
             return null;
@@ -160,9 +160,9 @@ public class MessageStoreService {
     public void storeOfflineMessage(OfflineMessageContent offlineMessage){
 
         // 找到fromId的队列
-        String fromKey = offlineMessage.getAppId() + ":" + Constants.RedisConstants.OfflineMessage + ":" + offlineMessage.getFromId();
+        String fromKey = offlineMessage.getAppId() + ":" + Constants.RedisConstants.OFFLINE_MESSAGE + ":" + offlineMessage.getFromId();
         // 找到toId的队列
-        String toKey = offlineMessage.getAppId() + ":" + Constants.RedisConstants.OfflineMessage + ":" + offlineMessage.getToId();
+        String toKey = offlineMessage.getAppId() + ":" + Constants.RedisConstants.OFFLINE_MESSAGE + ":" + offlineMessage.getToId();
 
         ZSetOperations<String, String> operations = stringRedisTemplate.opsForZSet();
         //判断 队列中的数据是否超过设定值
@@ -207,7 +207,7 @@ public class MessageStoreService {
         for (String memberId : memberIds) {
             // 找到toId的队列
             String toKey = offlineMessage.getAppId() + ":" +
-                    Constants.RedisConstants.OfflineMessage + ":" +
+                    Constants.RedisConstants.OFFLINE_MESSAGE + ":" +
                     memberId;
             offlineMessage.setConversationId(conversationService.convertConversationId(
                     ConversationTypeEnum.GROUP.getCode(),memberId,offlineMessage.getToId()

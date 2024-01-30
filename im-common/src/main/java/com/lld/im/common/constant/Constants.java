@@ -8,25 +8,25 @@ package com.lld.im.common.constant;
 public class Constants {
 
     /** channel绑定的userId Key*/
-    public static final String UserId = "userId";
+    public static final String USER_ID = "userId";
 
     /** channel绑定的appId */
-    public static final String AppId = "appId";
+    public static final String APP_ID = "appId";
 
-    public static final String ClientType = "clientType";
+    public static final String CLIENT_TYPE = "clientType";
 
-    public static final String Imei = "imei";
+    public static final String IMEI = "imei";
 
     /** channel绑定的clientType 和 imel Key*/
-    public static final String ClientImei = "clientImei";
+    public static final String CLIENT_IMEI = "clientImei";
 
-    public static final String ReadTime = "readTime";
+    public static final String READ_TIME = "readTime";
 
-    public static final String ImCoreZkRoot = "/im-coreRoot";
+    public static final String IM_CORE_ZK_ROOT = "/im-coreRoot";
 
-    public static final String ImCoreZkRootTcp = "/tcp";
+    public static final String IM_CORE_ZK_ROOT_TCP = "/tcp";
 
-    public static final String ImCoreZkRootWeb = "/web";
+    public static final String IM_CORE_ZK_ROOT_WEB = "/web";
 
 
     public static class RedisConstants{
@@ -34,63 +34,63 @@ public class Constants {
         /**
          * userSign，格式：appId:userSign:
          */
-        public static final String userSign = "userSign";
+        public static final String USER_SIGN = "userSign";
 
         /**
          * 用户上线通知channel
          */
-        public static final String UserLoginChannel
+        public static final String USER_LOGIN_CHANNEL
                 = "signal/channel/LOGIN_USER_INNER_QUEUE";
 
 
         /**
          * 用户session，appId + UserSessionConstants + 用户id 例如10000：userSession：lld
          */
-        public static final String UserSessionConstants = ":userSession:";
+        public static final String USER_SESSION_CONSTANTS = ":userSession:";
 
         /**
          * 缓存客户端消息防重，格式： appId + :cacheMessage: + messageId
          */
-        public static final String cacheMessage = "cacheMessage";
+        public static final String CACHE_MESSAGE = "cacheMessage";
 
-        public static final String OfflineMessage = "offlineMessage";
+        public static final String OFFLINE_MESSAGE = "offlineMessage";
 
         /**
          * seq 前缀
          */
-        public static final String SeqPrefix = "seq";
+        public static final String SEQ_PREFIX = "seq";
 
         /**
          * 用户订阅列表，格式 ：appId + :subscribe: + userId。Hash结构，filed为订阅自己的人
          */
-        public static final String subscribe = "subscribe";
+        public static final String SUBSCRIBE = "subscribe";
 
         /**
          * 用户自定义在线状态，格式 ：appId + :userCustomerStatus: + userId。set，value为用户id
          */
-        public static final String userCustomerStatus = "userCustomerStatus";
+        public static final String USER_CUSTOMER_STATUS = "userCustomerStatus";
 
     }
 
     public static class RabbitConstants{
 
-        public static final String Im2UserService = "pipeline2UserService";
+        public static final String IM_TO_USER_SERVICE = "pipeline2UserService";
 
-        public static final String Im2MessageService = "pipeline2MessageService";
+        public static final String IM_TO_MESSAGE_SERVICE = "pipeline2MessageService";
 
-        public static final String Im2GroupService = "pipeline2GroupService";
+        public static final String IM_TO_GRPUP_SERVICE = "pipeline2GroupService";
 
-        public static final String Im2FriendshipService = "pipeline2FriendshipService";
+        public static final String IM_TO_FRIENDSHIP_SERVICE = "pipeline2FriendshipService";
 
-        public static final String MessageService2Im = "messageService2Pipeline";
+        public static final String MESSAGE_SERVICE_TO_IM = "messageService2Pipeline";
 
-        public static final String GroupService2Im = "GroupService2Pipeline";
+        public static final String GROUP_SERVICE_TO_IM = "GroupService2Pipeline";
 
-        public static final String FriendShip2Im = "friendShip2Pipeline";
+        public static final String FRIENDSHIP_TO_IM = "friendShip2Pipeline";
 
-        public static final String StoreP2PMessage = "storeP2PMessage";
+        public static final String STORE_P2P_MESSAGE = "storeP2PMessage";
 
-        public static final String StoreGroupMessage = "storeGroupMessage";
+        public static final String STORE_GROUP_MESSAGE = "storeGroupMessage";
 
 
     }

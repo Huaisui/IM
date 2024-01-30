@@ -2,12 +2,10 @@ package com.lld.im.service.utils;
 
 import com.alibaba.fastjson.JSONObject;
 import com.lld.im.codec.proto.MessagePack;
-import com.lld.im.common.ClientType;
 import com.lld.im.common.constant.Constants;
 import com.lld.im.common.enums.command.Command;
 import com.lld.im.common.model.ClientInfo;
 import com.lld.im.common.model.UserSession;
-import jdk.nashorn.internal.scripts.JO;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,7 +33,7 @@ public class MessageProducer {
     @Autowired
     UserSessionUtils userSessionUtils;
 
-    private String queueName = Constants.RabbitConstants.MessageService2Im;
+    private String queueName = Constants.RabbitConstants.MESSAGE_SERVICE_TO_IM;
 
     public boolean sendMessage(UserSession session,Object msg){
         try {
@@ -77,8 +75,7 @@ public class MessageProducer {
         return list;
     }
 
-    public void sendToUser(String toId, Integer clientType,String imei, Command command,
-                           Object data, Integer appId){
+    public void sendToUser(String toId, Integer clientType,String imei, Command command, Object data, Integer appId){
         if(clientType != null && StringUtils.isNotBlank(imei)){
             ClientInfo clientInfo = new ClientInfo(appId, clientType, imei);
             sendToUserExceptClient(toId,command,data,clientInfo);
@@ -88,8 +85,7 @@ public class MessageProducer {
     }
 
     //发送给某个用户的指定客户端
-    public void sendToUser(String toId, Command command
-            , Object data, ClientInfo clientInfo){
+    public void sendToUser(String toId, Command command, Object data, ClientInfo clientInfo){
         UserSession userSession = userSessionUtils.getUserSession(clientInfo.getAppId(), toId, clientInfo.getClientType(),
                 clientInfo.getImei());
         sendPack(toId,command,data,userSession);
@@ -102,8 +98,7 @@ public class MessageProducer {
     }
 
     //发送给除了某一端的其他端
-    public void sendToUserExceptClient(String toId, Command command
-            , Object data, ClientInfo clientInfo){
+    public void sendToUserExceptClient(String toId, Command command, Object data, ClientInfo clientInfo){
         List<UserSession> userSession = userSessionUtils
                 .getUserSession(clientInfo.getAppId(),
                         toId);

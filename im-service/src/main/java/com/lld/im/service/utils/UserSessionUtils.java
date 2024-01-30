@@ -22,24 +22,21 @@ import java.util.Map;
 public class UserSessionUtils {
 
     public Object get;
+
     @Autowired
     StringRedisTemplate stringRedisTemplate;
 
     //1.获取用户所有的session
-
-    public List<UserSession> getUserSession(Integer appId,String userId){
-
-        String userSessionKey = appId + Constants.RedisConstants.UserSessionConstants
-                + userId;
-        Map<Object, Object> entries =
-                stringRedisTemplate.opsForHash().entries(userSessionKey);
+    public List<UserSession> getUserSession(Integer appId, String userId) {
+        String userSessionKey = appId + Constants.RedisConstants.USER_SESSION_CONSTANTS + userId;
+        Map<Object, Object> entries = stringRedisTemplate.opsForHash().entries(userSessionKey);
         List<UserSession> list = new ArrayList<>();
         Collection<Object> values = entries.values();
-        for (Object o : values){
+        for (Object o : values) {
             String str = (String) o;
             UserSession session =
                     JSONObject.parseObject(str, UserSession.class);
-            if(session.getConnectState() == ImConnectStatusEnum.ONLINE_STATUS.getCode()){
+            if (session.getConnectState() == ImConnectStatusEnum.ONLINE_STATUS.getCode()) {
                 list.add(session);
             }
         }
@@ -49,18 +46,11 @@ public class UserSessionUtils {
     //2.获取用户除了本端的session
 
     //1.获取用户所有的session
-
-    public UserSession getUserSession(Integer appId,String userId
-            ,Integer clientType,String imei){
-
-        String userSessionKey = appId + Constants.RedisConstants.UserSessionConstants
-                + userId;
+    public UserSession getUserSession(Integer appId, String userId, Integer clientType, String imei) {
+        String userSessionKey = appId + Constants.RedisConstants.USER_SESSION_CONSTANTS + userId;
         String hashKey = clientType + ":" + imei;
         Object o = stringRedisTemplate.opsForHash().get(userSessionKey, hashKey);
-        UserSession session =
-                JSONObject.parseObject(o.toString(), UserSession.class);
+        UserSession session = JSONObject.parseObject(o.toString(), UserSession.class);
         return session;
     }
-
-
 }

@@ -27,16 +27,12 @@ public class MessageReciver {
 
     private static void startReciverMessage() {
         try {
-            Channel channel = MqFactory
-                    .getChannel(Constants.RabbitConstants.MessageService2Im + brokerId);
-            channel.queueDeclare(Constants.RabbitConstants.MessageService2Im + brokerId,
-                    true, false, false, null
-            );
-            channel.queueBind(Constants.RabbitConstants.MessageService2Im + brokerId,
-                    Constants.RabbitConstants.MessageService2Im, brokerId);
-
-            channel.basicConsume(Constants.RabbitConstants
-                            .MessageService2Im + brokerId, false,
+            Channel channel = MqFactory.getChannel(Constants.RabbitConstants.MESSAGE_SERVICE_TO_IM + brokerId);
+            channel.queueDeclare(Constants.RabbitConstants.MESSAGE_SERVICE_TO_IM + brokerId,
+                                true, false, false, null);
+            channel.queueBind(Constants.RabbitConstants.MESSAGE_SERVICE_TO_IM + brokerId,
+                              Constants.RabbitConstants.MESSAGE_SERVICE_TO_IM, brokerId);
+            channel.basicConsume(Constants.RabbitConstants.MESSAGE_SERVICE_TO_IM + brokerId, false,
                     new DefaultConsumer(channel) {
                         @Override
                         public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) throws IOException {
@@ -48,12 +44,10 @@ public class MessageReciver {
                                 BaseProcess messageProcess = ProcessFactory
                                         .getMessageProcess(messagePack.getCommand());
                                 messageProcess.process(messagePack);
-
-                                channel.basicAck(envelope.getDeliveryTag(),false);
-
-                            }catch (Exception e){
+                                channel.basicAck(envelope.getDeliveryTag(), false);
+                            } catch (Exception e) {
                                 e.printStackTrace();
-                                channel.basicNack(envelope.getDeliveryTag(),false,false);
+                                channel.basicNack(envelope.getDeliveryTag(), false, false);
                             }
                         }
                     }
@@ -73,6 +67,4 @@ public class MessageReciver {
         }
         startReciverMessage();
     }
-
-
 }

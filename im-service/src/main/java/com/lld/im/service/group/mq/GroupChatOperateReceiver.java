@@ -5,12 +5,10 @@ import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
 import com.lld.im.common.constant.Constants;
 import com.lld.im.common.enums.command.GroupEventCommand;
-import com.lld.im.common.enums.command.MessageCommand;
 import com.lld.im.common.model.message.GroupChatMessageContent;
 import com.lld.im.common.model.message.MessageReadedContent;
 import com.lld.im.service.group.service.GroupMessageService;
 import com.lld.im.service.message.service.MessageSyncService;
-import com.lld.im.service.message.service.P2PMessageService;
 import com.rabbitmq.client.Channel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,8 +45,8 @@ public class GroupChatOperateReceiver {
 
     @RabbitListener(
             bindings = @QueueBinding(
-                 value = @Queue(value = Constants.RabbitConstants.Im2GroupService,durable = "true"),
-                 exchange = @Exchange(value = Constants.RabbitConstants.Im2GroupService,durable = "true")
+                 value = @Queue(value = Constants.RabbitConstants.IM_TO_GRPUP_SERVICE,durable = "true"),
+                 exchange = @Exchange(value = Constants.RabbitConstants.IM_TO_GRPUP_SERVICE,durable = "true")
             ),concurrency = "1"
     )
     public void onChatMessage(@Payload Message message,

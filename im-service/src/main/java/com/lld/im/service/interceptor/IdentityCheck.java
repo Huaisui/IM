@@ -17,7 +17,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
-import sun.rmi.runtime.Log;
 
 import java.util.concurrent.TimeUnit;
 
@@ -45,7 +44,7 @@ public class IdentityCheck {
                                                  String appId,String userSig){
 
         String cacheUserSig = stringRedisTemplate.opsForValue()
-                .get(appId + ":" + Constants.RedisConstants.userSign + ":"
+                .get(appId + ":" + Constants.RedisConstants.USER_SIGN + ":"
                 + identifier + userSig);
         if(!StringUtils.isBlank(cacheUserSig) && Long.valueOf(cacheUserSig)
          >  System.currentTimeMillis() / 1000){
@@ -102,7 +101,7 @@ public class IdentityCheck {
         String genSig = sigAPI.genUserSig(identifier, expireSec,time,null);
         if (genSig.toLowerCase().equals(userSig.toLowerCase()))
         {
-            String key = appId + ":" + Constants.RedisConstants.userSign + ":"
+            String key = appId + ":" + Constants.RedisConstants.USER_SIGN + ":"
                     +identifier + userSig;
 
             Long etime = expireTime - System.currentTimeMillis() / 1000;

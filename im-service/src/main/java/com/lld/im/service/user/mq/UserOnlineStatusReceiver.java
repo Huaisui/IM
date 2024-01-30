@@ -41,8 +41,8 @@ public class UserOnlineStatusReceiver {
      * @throws Exception
      */
     @RabbitListener(bindings = @QueueBinding(
-            value = @Queue(value = Constants.RabbitConstants.Im2UserService, durable = "true"),
-            exchange = @Exchange(value = Constants.RabbitConstants.Im2UserService, durable = "true")
+            value = @Queue(value = Constants.RabbitConstants.IM_TO_USER_SERVICE, durable = "true"),
+            exchange = @Exchange(value = Constants.RabbitConstants.IM_TO_USER_SERVICE, durable = "true")
     ), concurrency = "1")
     @RabbitHandler
     public void onChatMessage(@Payload Message message,

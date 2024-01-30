@@ -18,22 +18,22 @@ public class ZKit {
 
     //im-coreRoot/tcp/ip:port
     public void createRootNode(){
-        boolean exists = zkClient.exists(Constants.ImCoreZkRoot);
+        boolean exists = zkClient.exists(Constants.IM_CORE_ZK_ROOT);
         if(!exists){
-            zkClient.createPersistent(Constants.ImCoreZkRoot);
+            zkClient.createPersistent(Constants.IM_CORE_ZK_ROOT);
         }
-        boolean tcpExists = zkClient.exists(Constants.ImCoreZkRoot +
-                Constants.ImCoreZkRootTcp);
+        boolean tcpExists = zkClient.exists(Constants.IM_CORE_ZK_ROOT +
+                Constants.IM_CORE_ZK_ROOT_TCP);
         if(!tcpExists){
-            zkClient.createPersistent(Constants.ImCoreZkRoot +
-                    Constants.ImCoreZkRootTcp);
+            zkClient.createPersistent(Constants.IM_CORE_ZK_ROOT +
+                    Constants.IM_CORE_ZK_ROOT_TCP);
         }
 
-        boolean webExists = zkClient.exists(Constants.ImCoreZkRoot +
-                Constants.ImCoreZkRootWeb);
+        boolean webExists = zkClient.exists(Constants.IM_CORE_ZK_ROOT +
+                Constants.IM_CORE_ZK_ROOT_WEB);
         if(!tcpExists){
-            zkClient.createPersistent(Constants.ImCoreZkRoot +
-                    Constants.ImCoreZkRootWeb);
+            zkClient.createPersistent(Constants.IM_CORE_ZK_ROOT +
+                    Constants.IM_CORE_ZK_ROOT_WEB);
         }
     }
 

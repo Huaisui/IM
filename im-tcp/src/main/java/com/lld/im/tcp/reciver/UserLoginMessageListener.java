@@ -37,7 +37,7 @@ public class UserLoginMessageListener {
     }
 
     public void listenerUserLogin() {
-        RTopic topic = RedisManager.getRedissonClient().getTopic(Constants.RedisConstants.UserLoginChannel);
+        RTopic topic = RedisManager.getRedissonClient().getTopic(Constants.RedisConstants.USER_LOGIN_CHANNEL);
         topic.addListener(String.class, new MessageListener<String>() {
             @Override
             public void onMessage(CharSequence charSequence, String msg) {
@@ -47,13 +47,13 @@ public class UserLoginMessageListener {
 
                 for (NioSocketChannel nioSocketChannel : nioSocketChannels) {
                     if (loginModel == DeviceMultiLoginEnum.ONE.getLoginMode()) {
-                        Integer clientType = (Integer) nioSocketChannel.attr(AttributeKey.valueOf(Constants.ClientType)).get();
-                        String imei = (String) nioSocketChannel.attr(AttributeKey.valueOf(Constants.Imei)).get();
+                        Integer clientType = (Integer) nioSocketChannel.attr(AttributeKey.valueOf(Constants.CLIENT_TYPE)).get();
+                        String imei = (String) nioSocketChannel.attr(AttributeKey.valueOf(Constants.IMEI)).get();
 
                         if (!(clientType + ":" + imei).equals(dto.getClientType() + ":" + dto.getImei())) {
                             MessagePack<Object> pack = new MessagePack<>();
-                            pack.setToId((String) nioSocketChannel.attr(AttributeKey.valueOf(Constants.UserId)).get());
-                            pack.setUserId((String) nioSocketChannel.attr(AttributeKey.valueOf(Constants.UserId)).get());
+                            pack.setToId((String) nioSocketChannel.attr(AttributeKey.valueOf(Constants.USER_ID)).get());
+                            pack.setUserId((String) nioSocketChannel.attr(AttributeKey.valueOf(Constants.USER_ID)).get());
                             pack.setCommand(SystemCommand.MUTUALLOGIN.getCommand());
                             nioSocketChannel.writeAndFlush(pack);
                         }
@@ -62,24 +62,24 @@ public class UserLoginMessageListener {
                         if (dto.getClientType() == ClientType.WEB.getCode()) {
                             continue;
                         }
-                        Integer clientType = (Integer) nioSocketChannel.attr(AttributeKey.valueOf(Constants.ClientType)).get();
+                        Integer clientType = (Integer) nioSocketChannel.attr(AttributeKey.valueOf(Constants.CLIENT_TYPE)).get();
 
                         if (clientType == ClientType.WEB.getCode()) {
                             continue;
                         }
-                        String imei = (String) nioSocketChannel.attr(AttributeKey.valueOf(Constants.Imei)).get();
+                        String imei = (String) nioSocketChannel.attr(AttributeKey.valueOf(Constants.IMEI)).get();
                         if (!(clientType + ":" + imei).equals(dto.getClientType() + ":" + dto.getImei())) {
                             MessagePack<Object> pack = new MessagePack<>();
-                            pack.setToId((String) nioSocketChannel.attr(AttributeKey.valueOf(Constants.UserId)).get());
-                            pack.setUserId((String) nioSocketChannel.attr(AttributeKey.valueOf(Constants.UserId)).get());
+                            pack.setToId((String) nioSocketChannel.attr(AttributeKey.valueOf(Constants.USER_ID)).get());
+                            pack.setUserId((String) nioSocketChannel.attr(AttributeKey.valueOf(Constants.USER_ID)).get());
                             pack.setCommand(SystemCommand.MUTUALLOGIN.getCommand());
                             nioSocketChannel.writeAndFlush(pack);
                         }
 
                     } else if (loginModel == DeviceMultiLoginEnum.THREE.getLoginMode()) {
 
-                        Integer clientType = (Integer) nioSocketChannel.attr(AttributeKey.valueOf(Constants.ClientType)).get();
-                        String imei = (String) nioSocketChannel.attr(AttributeKey.valueOf(Constants.Imei)).get();
+                        Integer clientType = (Integer) nioSocketChannel.attr(AttributeKey.valueOf(Constants.CLIENT_TYPE)).get();
+                        String imei = (String) nioSocketChannel.attr(AttributeKey.valueOf(Constants.IMEI)).get();
                         if (dto.getClientType() == ClientType.WEB.getCode()) {
                             continue;
                         }
@@ -101,8 +101,8 @@ public class UserLoginMessageListener {
 
                         if (isSameClient && !(clientType + ":" + imei).equals(dto.getClientType() + ":" + dto.getImei())) {
                             MessagePack<Object> pack = new MessagePack<>();
-                            pack.setToId((String) nioSocketChannel.attr(AttributeKey.valueOf(Constants.UserId)).get());
-                            pack.setUserId((String) nioSocketChannel.attr(AttributeKey.valueOf(Constants.UserId)).get());
+                            pack.setToId((String) nioSocketChannel.attr(AttributeKey.valueOf(Constants.USER_ID)).get());
+                            pack.setUserId((String) nioSocketChannel.attr(AttributeKey.valueOf(Constants.USER_ID)).get());
                             pack.setCommand(SystemCommand.MUTUALLOGIN.getCommand());
                             nioSocketChannel.writeAndFlush(pack);
                         }

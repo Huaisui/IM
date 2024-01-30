@@ -21,7 +21,7 @@ public class WriteUserSeq {
     RedisTemplate redisTemplate;
 
     public void writeUserSeq(Integer appId,String userId,String type,Long seq){
-        String key = appId + ":" + Constants.RedisConstants.SeqPrefix + ":" + userId;
+        String key = appId + ":" + Constants.RedisConstants.SEQ_PREFIX + ":" + userId;
         redisTemplate.opsForHash().put(key,type,seq);
     }
 

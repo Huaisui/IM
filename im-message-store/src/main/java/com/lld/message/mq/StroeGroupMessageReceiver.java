@@ -5,7 +5,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.lld.im.common.constant.Constants;
 import com.lld.message.dao.ImMessageBodyEntity;
 import com.lld.message.model.DoStoreGroupMessageDto;
-import com.lld.message.model.DoStoreP2PMessageDto;
 import com.lld.message.service.StoreMessageService;
 import com.rabbitmq.client.Channel;
 import org.slf4j.Logger;
@@ -37,8 +36,8 @@ public class StroeGroupMessageReceiver {
 
     @RabbitListener(
             bindings = @QueueBinding(
-                    value = @Queue(value = Constants.RabbitConstants.StoreGroupMessage,durable = "true"),
-                    exchange = @Exchange(value = Constants.RabbitConstants.StoreGroupMessage,durable = "true")
+                    value = @Queue(value = Constants.RabbitConstants.STORE_GROUP_MESSAGE,durable = "true"),
+                    exchange = @Exchange(value = Constants.RabbitConstants.STORE_GROUP_MESSAGE,durable = "true")
             ),concurrency = "1"
     )
     public void onChatMessage(@Payload Message message,

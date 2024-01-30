@@ -205,7 +205,7 @@ public class ImUserviceImpl implements ImUserService {
 
     @Override
     public ResponseVO getUserSequence(GetUserSequenceReq req) {
-        Map<Object, Object> map = stringRedisTemplate.opsForHash().entries(req.getAppId() + ":" + Constants.RedisConstants.SeqPrefix + ":" + req.getUserId());
+        Map<Object, Object> map = stringRedisTemplate.opsForHash().entries(req.getAppId() + ":" + Constants.RedisConstants.SEQ_PREFIX + ":" + req.getUserId());
         Long groupSeq = imGroupService.getUserGroupMaxSeq(req.getUserId(),req.getAppId());
         map.put(Constants.SeqConstants.Group,groupSeq);
         return ResponseVO.successResponse(map);

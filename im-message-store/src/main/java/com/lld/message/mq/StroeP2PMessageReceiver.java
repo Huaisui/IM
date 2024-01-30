@@ -36,8 +36,8 @@ public class StroeP2PMessageReceiver {
 
     @RabbitListener(
             bindings = @QueueBinding(
-                    value = @Queue(value = Constants.RabbitConstants.StoreP2PMessage,durable = "true"),
-                    exchange = @Exchange(value = Constants.RabbitConstants.StoreP2PMessage,durable = "true")
+                    value = @Queue(value = Constants.RabbitConstants.STORE_P2P_MESSAGE,durable = "true"),
+                    exchange = @Exchange(value = Constants.RabbitConstants.STORE_P2P_MESSAGE,durable = "true")
             ),concurrency = "1"
     )
     public void onChatMessage(@Payload Message message,

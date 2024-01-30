@@ -24,9 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.Headers;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
-import sun.nio.cs.ext.MS874;
 
-import java.io.UnsupportedEncodingException;
 import java.util.Map;
 import java.util.Objects;
 
@@ -48,42 +46,36 @@ public class ChatOperateReceiver {
 
     @RabbitListener(
             bindings = @QueueBinding(
-                 value = @Queue(value = Constants.RabbitConstants.Im2MessageService,durable = "true"),
-                 exchange = @Exchange(value = Constants.RabbitConstants.Im2MessageService,durable = "true")
-            ),concurrency = "1"
+                    value = @Queue(value = Constants.RabbitConstants.IM_TO_MESSAGE_SERVICE, durable = "true"),
+                    exchange = @Exchange(value = Constants.RabbitConstants.IM_TO_MESSAGE_SERVICE, durable = "true")
+            ), concurrency = "1"
     )
-    public void onChatMessage(@Payload Message message,
-                              @Headers Map<String,Object> headers,
-                              Channel channel) throws Exception {
-        String msg = new String(message.getBody(),"utf-8");
+    public void onChatMessage(@Payload Message message, @Headers Map<String, Object> headers, Channel channel) throws Exception {
+        String msg = new String(message.getBody(), "utf-8");
         logger.info("CHAT MSG FORM QUEUE ::: {}", msg);
         Long deliveryTag = (Long) headers.get(AmqpHeaders.DELIVERY_TAG);
         try {
             JSONObject jsonObject = JSON.parseObject(msg);
             Integer command = jsonObject.getInteger("command");
-            if(command.equals(MessageCommand.MSG_P2P.getCommand())){
+            if (command.equals(MessageCommand.MSG_P2P.getCommand())) {
                 //处理消息
-                MessageContent messageContent
-                        = jsonObject.toJavaObject(MessageContent.class);
+                MessageContent messageContent = jsonObject.toJavaObject(MessageContent.class);
                 p2PMessageService.process(messageContent);
-            }else if(command.equals(MessageCommand.MSG_RECIVE_ACK.getCommand())){
+            } else if (command.equals(MessageCommand.MSG_RECIVE_ACK.getCommand())) {
                 //消息接收确认
-                MessageReciveAckContent messageContent
-                        = jsonObject.toJavaObject(MessageReciveAckContent.class);
+                MessageReciveAckContent messageContent = jsonObject.toJavaObject(MessageReciveAckContent.class);
                 messageSyncService.receiveMark(messageContent);
-            }else if(command.equals(MessageCommand.MSG_READED.getCommand())){
+            } else if (command.equals(MessageCommand.MSG_READED.getCommand())) {
                 //消息接收确认
-                MessageReadedContent messageContent
-                        = jsonObject.toJavaObject(MessageReadedContent.class);
+                MessageReadedContent messageContent = jsonObject.toJavaObject(MessageReadedContent.class);
                 messageSyncService.readMark(messageContent);
-            }else if (Objects.equals(command, MessageCommand.MSG_RECALL.getCommand())) {
+            } else if (Objects.equals(command, MessageCommand.MSG_RECALL.getCommand())) {
 //                撤回消息
-                RecallMessageContent messageContent = JSON.parseObject(msg, new TypeReference<RecallMessageContent>() {
-                }.getType());
+                RecallMessageContent messageContent = JSON.parseObject(msg, new TypeReference<RecallMessageContent>() {}.getType());
                 messageSyncService.recallMessage(messageContent);
             }
             channel.basicAck(deliveryTag, false);
-        }catch (Exception e){
+        } catch (Exception e) {
             logger.error("处理消息出现异常：{}", e.getMessage());
             logger.error("RMQ_CHAT_TRAN_ERROR", e);
             logger.error("NACK_MSG:{}", msg);

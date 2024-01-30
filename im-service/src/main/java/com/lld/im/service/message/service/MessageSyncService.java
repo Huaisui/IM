@@ -5,7 +5,6 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.lld.im.codec.pack.message.MessageReadedPack;
 import com.lld.im.codec.pack.message.RecallMessageNotifyPack;
-import com.lld.im.codec.proto.Message;
 import com.lld.im.common.ResponseVO;
 import com.lld.im.common.constant.Constants;
 import com.lld.im.common.enums.ConversationTypeEnum;
@@ -120,7 +119,7 @@ public class MessageSyncService {
 
         SyncResp<OfflineMessageContent> resp = new SyncResp<>();
 
-        String key = req.getAppId() + ":" + Constants.RedisConstants.OfflineMessage + ":" + req.getOperater();
+        String key = req.getAppId() + ":" + Constants.RedisConstants.OFFLINE_MESSAGE + ":" + req.getOperater();
         //获取最大的seq
         Long maxSeq = 0L;
         ZSetOperations zSetOperations = redisTemplate.opsForZSet();
@@ -192,9 +191,9 @@ public class MessageSyncService {
         if(content.getConversationType() == ConversationTypeEnum.P2P.getCode()){
 
             // 找到fromId的队列
-            String fromKey = content.getAppId() + ":" + Constants.RedisConstants.OfflineMessage + ":" + content.getFromId();
+            String fromKey = content.getAppId() + ":" + Constants.RedisConstants.OFFLINE_MESSAGE + ":" + content.getFromId();
             // 找到toId的队列
-            String toKey = content.getAppId() + ":" + Constants.RedisConstants.OfflineMessage + ":" + content.getToId();
+            String toKey = content.getAppId() + ":" + Constants.RedisConstants.OFFLINE_MESSAGE + ":" + content.getToId();
 
             OfflineMessageContent offlineMessageContent = new OfflineMessageContent();
             BeanUtils.copyProperties(content,offlineMessageContent);
