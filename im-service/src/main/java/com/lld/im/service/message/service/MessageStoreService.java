@@ -30,7 +30,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * @description:
  * @author: teo
- * @version: 1.0
+ *  
  */
 @Service
 public class MessageStoreService {

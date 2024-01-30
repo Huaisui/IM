@@ -12,7 +12,7 @@ import org.redisson.config.SingleServerConfig;
 /**
  * @description:
  * @author: teo
- * @version: 1.0
+ *  
  */
 public class SingleClientStrategy {
 

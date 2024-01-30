@@ -24,7 +24,7 @@ import java.util.List;
  * 3 三端登录：允许手机+pc+web，踢掉同端的其他imei 除了web
  * 4 不做任何处理
  * @author: teo
- * @version: 1.0
+ *  
  */
 public class UserLoginMessageListener {
 

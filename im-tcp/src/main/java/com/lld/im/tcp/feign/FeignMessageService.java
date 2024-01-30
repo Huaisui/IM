@@ -8,7 +8,7 @@ import feign.RequestLine;
 /**
  * @description:
  * @author: teo
- * @version: 1.0
+ *
  */
 public interface FeignMessageService {
 

@@ -42,7 +42,7 @@ import java.net.InetAddress;
 /**
  * @description:
  * @author: teo
- * @version: 1.0
+ *  
  */
 public class NettyServerHandler extends SimpleChannelInboundHandler<Message> {
 

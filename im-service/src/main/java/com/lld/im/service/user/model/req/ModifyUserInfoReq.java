@@ -8,7 +8,7 @@ import javax.validation.constraints.NotEmpty;
 /**
  * @description:
  * @author: teo
- * @version: 1.0
+ *  
  */
 @Data
 public class ModifyUserInfoReq extends RequestBase {

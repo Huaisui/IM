@@ -33,7 +33,7 @@ import java.util.Map;
 /**
  * @description:
  * @author: teo
- * @version: 1.0
+ *
  */
 @Service
 public class ImUserviceImpl implements ImUserService {

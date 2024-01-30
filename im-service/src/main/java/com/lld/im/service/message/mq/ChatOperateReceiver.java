@@ -31,7 +31,7 @@ import java.util.Objects;
 /**
  * @description:
  * @author: teo
- * @version: 1.0
+ *  
  */
 @Component
 public class ChatOperateReceiver {

@@ -29,7 +29,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  * @description:
  * @author: teo
- * @version: 1.0
+ *  
  */
 @Service
 public class GroupMessageService {

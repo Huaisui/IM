@@ -20,7 +20,7 @@ import java.lang.reflect.Method;
 /**
  * @description:
  * @author: teo
- * @version: 1.0
+ *  
  */
 @Configuration
 public class BeanConfig {

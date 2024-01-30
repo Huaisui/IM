@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 /**
  * @description:
  * @author: teo
- * @version: 1.0
+ *  
  */
 @Repository
 public interface ImConversationSetMapper extends BaseMapper<ImConversationSetEntity> {

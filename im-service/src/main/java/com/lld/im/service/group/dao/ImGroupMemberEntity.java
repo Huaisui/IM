@@ -8,7 +8,7 @@ import lombok.Data;
 /**
  * @description:
  * @author: teo
- * @version: 1.0
+ *  
  */
 @Data
 @TableName("im_group_member")

@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * @description:
  * @author: teo
- * @version: 1.0
+ *  
  */
 @Data
 public class SubscribeUserOnlineStatusReq extends RequestBase {

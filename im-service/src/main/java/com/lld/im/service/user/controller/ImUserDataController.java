@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * @description:
  * @author: teo
- * @version: 1.0
+ *  
  */
 @RestController
 @RequestMapping("v1/user/data")

@@ -16,7 +16,7 @@ import java.util.Map;
 /**
  * @description:
  * @author: teo
- * @version: 1.0
+ *  
  */
 @Component
 public class UserSessionUtils {

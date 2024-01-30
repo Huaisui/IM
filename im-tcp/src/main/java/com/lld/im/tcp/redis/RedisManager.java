@@ -7,7 +7,7 @@ import org.redisson.api.RedissonClient;
 /**
  * @description:
  * @author: teo
- * @version: 1.0
+ *  
  */
 public class RedisManager {
 

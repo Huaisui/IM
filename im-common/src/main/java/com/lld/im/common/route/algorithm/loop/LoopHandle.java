@@ -10,7 +10,7 @@ import java.util.concurrent.atomic.AtomicLong;
 /**
  * @description:
  * @author: teo
- * @version: 1.0
+ *  
  */
 public class LoopHandle implements RouteHandle {
 

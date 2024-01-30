@@ -14,7 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * @description: 投递消息到逻辑层
  * @author: teo
- * @version: 1.0
+ *  
  */
 @Slf4j
 public class MqMessageProducer {

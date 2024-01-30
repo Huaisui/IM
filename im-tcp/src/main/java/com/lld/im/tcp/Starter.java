@@ -19,7 +19,7 @@ import java.net.UnknownHostException;
 /**
  * @description:
  * @author: teo
- * @version: 1.0
+ *  
  */
 public class Starter {
 

@@ -18,7 +18,6 @@ import com.lld.im.service.conversation.dao.ImConversationSetEntity;
 import com.lld.im.service.conversation.dao.mapper.ImConversationSetMapper;
 import com.lld.im.service.conversation.model.DeleteConversationReq;
 import com.lld.im.service.conversation.model.UpdateConversationReq;
-import com.lld.im.service.friendship.dao.ImFriendShipEntity;
 import com.lld.im.service.seq.RedisSeq;
 import com.lld.im.service.utils.MessageProducer;
 import com.lld.im.service.utils.WriteUserSeq;
@@ -31,7 +30,7 @@ import java.util.List;
 /**
  * @description:
  * @author: teo
- * @version: 1.0
+ *  
  */
 @Service
 public class ConversationService {
@@ -51,50 +50,56 @@ public class ConversationService {
     @Autowired
     WriteUserSeq writeUserSeq;
 
-    public String convertConversationId(Integer type,String fromId,String toId){
+    public String convertConversationId(Integer type, String fromId, String toId) {
         return type + "_" + fromId + "_" + toId;
     }
 
-    public void  messageMarkRead(MessageReadedContent messageReadedContent){
+    public void messageMarkRead(MessageReadedContent messageReadedContent) {
 
         String toId = messageReadedContent.getToId();
-        if(messageReadedContent.getConversationType() == ConversationTypeEnum.GROUP.getCode()){
+        if (messageReadedContent.getConversationType() == ConversationTypeEnum.GROUP.getCode()) {
             toId = messageReadedContent.getGroupId();
         }
+
         String conversationId = convertConversationId(messageReadedContent.getConversationType(),
                 messageReadedContent.getFromId(), toId);
-        QueryWrapper<ImConversationSetEntity> query = new QueryWrapper<>();
-        query.eq("conversation_id",conversationId);
-        query.eq("app_id",messageReadedContent.getAppId());
-        ImConversationSetEntity imConversationSetEntity = imConversationSetMapper.selectOne(query);
-        if(imConversationSetEntity == null){
+        ImConversationSetEntity imConversationSetEntity = selectConversationFromDatabase(conversationId, messageReadedContent);
+
+        if (imConversationSetEntity == null) {
             imConversationSetEntity = new ImConversationSetEntity();
             long seq = redisSeq.doGetSeq(messageReadedContent.getAppId() + ":" + Constants.SeqConstants.Conversation);
             imConversationSetEntity.setConversationId(conversationId);
-            BeanUtils.copyProperties(messageReadedContent,imConversationSetEntity);
+            BeanUtils.copyProperties(messageReadedContent, imConversationSetEntity);
             imConversationSetEntity.setReadedSequence(messageReadedContent.getMessageSequence());
             imConversationSetEntity.setToId(toId);
             imConversationSetEntity.setSequence(seq);
             imConversationSetMapper.insert(imConversationSetEntity);
             writeUserSeq.writeUserSeq(messageReadedContent.getAppId(),
-                    messageReadedContent.getFromId(),Constants.SeqConstants.Conversation,seq);
-        }else{
+                    messageReadedContent.getFromId(), Constants.SeqConstants.Conversation, seq);
+        } else {
             long seq = redisSeq.doGetSeq(messageReadedContent.getAppId() + ":" + Constants.SeqConstants.Conversation);
             imConversationSetEntity.setSequence(seq);
             imConversationSetEntity.setReadedSequence(messageReadedContent.getMessageSequence());
             imConversationSetMapper.readMark(imConversationSetEntity);
             writeUserSeq.writeUserSeq(messageReadedContent.getAppId(),
-                    messageReadedContent.getFromId(),Constants.SeqConstants.Conversation,seq);
+                    messageReadedContent.getFromId(), Constants.SeqConstants.Conversation, seq);
         }
     }
 
+    private ImConversationSetEntity selectConversationFromDatabase(String conversationId, MessageReadedContent messageReadedContent) {
+        QueryWrapper<ImConversationSetEntity> query = new QueryWrapper<>();
+        query.eq("conversation_id", conversationId);
+        query.eq("app_id", messageReadedContent.getAppId());
+        return imConversationSetMapper.selectOne(query);
+    }
+
     /**
-     * @description: 删除会话
      * @param
      * @return com.lld.im.common.ResponseVO
+     * @description: 删除会话
      * @author lld
      */
-    public ResponseVO deleteConversation(DeleteConversationReq req){
+    public ResponseVO deleteConversation(DeleteConversationReq req) {
 
         //置顶 有免打扰
 //        QueryWrapper<ImConversationSetEntity> queryWrapper = new QueryWrapper<>();
@@ -107,46 +112,44 @@ public class ConversationService {
 //            imConversationSetMapper.update(imConversationSetEntity,queryWrapper);
 //        }
 
-        if(appConfig.getDeleteConversationSyncMode() == 1){
+        if (appConfig.getDeleteConversationSyncMode() == 1) {
             DeleteConversationPack pack = new DeleteConversationPack();
             pack.setConversationId(req.getConversationId());
             messageProducer.sendToUserExceptClient(req.getFromId(),
                     ConversationEventCommand.CONVERSATION_DELETE,
-                    pack,new ClientInfo(req.getAppId(),req.getClientType(),
+                    pack, new ClientInfo(req.getAppId(), req.getClientType(),
                             req.getImei()));
         }
         return ResponseVO.successResponse();
     }
 
     /**
-     * @description: 更新会话 置顶or免打扰
      * @param
      * @return com.lld.im.common.ResponseVO
+     * @description: 更新会话 置顶or免打扰
      * @author lld
      */
-    public ResponseVO updateConversation(UpdateConversationReq req){
+    public ResponseVO updateConversation(UpdateConversationReq req) {
 
 
-
-
-        if(req.getIsTop() == null && req.getIsMute() == null){
+        if (req.getIsTop() == null && req.getIsMute() == null) {
             return ResponseVO.errorResponse(ConversationErrorCode.CONVERSATION_UPDATE_PARAM_ERROR);
         }
         QueryWrapper<ImConversationSetEntity> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("conversation_id",req.getConversationId());
-        queryWrapper.eq("app_id",req.getAppId());
+        queryWrapper.eq("conversation_id", req.getConversationId());
+        queryWrapper.eq("app_id", req.getAppId());
         ImConversationSetEntity imConversationSetEntity = imConversationSetMapper.selectOne(queryWrapper);
-        if(imConversationSetEntity != null){
+        if (imConversationSetEntity != null) {
             long seq = redisSeq.doGetSeq(req.getAppId() + ":" + Constants.SeqConstants.Conversation);
 
-            if(req.getIsMute() != null){
+            if (req.getIsMute() != null) {
                 imConversationSetEntity.setIsTop(req.getIsTop());
             }
-            if(req.getIsMute() != null){
+            if (req.getIsMute() != null) {
                 imConversationSetEntity.setIsMute(req.getIsMute());
             }
             imConversationSetEntity.setSequence(seq);
-            imConversationSetMapper.update(imConversationSetEntity,queryWrapper);
+            imConversationSetMapper.update(imConversationSetEntity, queryWrapper);
             writeUserSeq.writeUserSeq(req.getAppId(), req.getFromId(),
                     Constants.SeqConstants.Conversation, seq);
 
@@ -158,14 +161,14 @@ public class ConversationService {
             pack.setConversationType(imConversationSetEntity.getConversationType());
             messageProducer.sendToUserExceptClient(req.getFromId(),
                     ConversationEventCommand.CONVERSATION_UPDATE,
-                    pack,new ClientInfo(req.getAppId(),req.getClientType(),
+                    pack, new ClientInfo(req.getAppId(), req.getClientType(),
                             req.getImei()));
         }
         return ResponseVO.successResponse();
     }
 
     public ResponseVO syncConversationSet(SyncReq req) {
-        if(req.getMaxLimit() > 100){
+        if (req.getMaxLimit() > 100) {
             req.setMaxLimit(100);
         }
 
@@ -173,15 +176,15 @@ public class ConversationService {
         //seq > req.getseq limit maxLimit
         QueryWrapper<ImConversationSetEntity> queryWrapper =
                 new QueryWrapper<>();
-        queryWrapper.eq("from_id",req.getOperater());
-        queryWrapper.gt("sequence",req.getLastSequence());
-        queryWrapper.eq("app_id",req.getAppId());
+        queryWrapper.eq("from_id", req.getOperater());
+        queryWrapper.gt("sequence", req.getLastSequence());
+        queryWrapper.eq("app_id", req.getAppId());
         queryWrapper.last(" limit " + req.getMaxLimit());
         queryWrapper.orderByAsc("sequence");
         List<ImConversationSetEntity> list = imConversationSetMapper
                 .selectList(queryWrapper);
 
-        if(!CollectionUtils.isEmpty(list)){
+        if (!CollectionUtils.isEmpty(list)) {
             ImConversationSetEntity maxSeqEntity = list.get(list.size() - 1);
             resp.setDataList(list);
             //设置最大seq

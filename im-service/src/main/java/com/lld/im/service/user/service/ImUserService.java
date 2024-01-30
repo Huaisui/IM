@@ -8,7 +8,7 @@ import com.lld.im.service.user.model.resp.GetUserInfoResp;
 /**
  * @description:
  * @author: teo
- * @version: 1.0
+ *  
  */
 public interface ImUserService {
 

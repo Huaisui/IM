@@ -18,9 +18,8 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * @description:
+ * @description: 投递消息到 TCP 层
  * @author: teo
- * @version: 1.0
  */
 @Service
 public class MessageProducer {
@@ -35,19 +34,19 @@ public class MessageProducer {
 
     private String queueName = Constants.RabbitConstants.MESSAGE_SERVICE_TO_IM;
 
-    public boolean sendMessage(UserSession session,Object msg){
+    public boolean sendMessage(UserSession session, Object msg) {
         try {
             logger.info("send message == " + msg);
-            rabbitTemplate.convertAndSend(queueName,session.getBrokerId()+"",msg);
+            rabbitTemplate.convertAndSend(queueName, session.getBrokerId() + "", msg);
             return true;
-        }catch (Exception e){
+        } catch (Exception e) {
             logger.error("send error :" + e.getMessage());
             return false;
         }
     }
 
     //包装数据，调用sendMessage
-    public boolean sendPack(String toId, Command command,Object msg,UserSession session){
+    public boolean sendPack(String toId, Command command, Object msg, UserSession session) {
         MessagePack messagePack = new MessagePack();
         messagePack.setCommand(command.getCommand());
         messagePack.setToId(toId);
@@ -62,33 +61,32 @@ public class MessageProducer {
     }
 
     //发送给所有端的方法
-    public List<ClientInfo> sendToUser(String toId,Command command,Object data,Integer appId){
-        List<UserSession> userSession
-                = userSessionUtils.getUserSession(appId, toId);
+    public List<ClientInfo> sendToUser(String toId, Command command, Object data, Integer appId) {
+        List<UserSession> userSession = userSessionUtils.getUserSession(appId, toId);
         List<ClientInfo> list = new ArrayList<>();
         for (UserSession session : userSession) {
             boolean b = sendPack(toId, command, data, session);
-            if(b){
-                list.add(new ClientInfo(session.getAppId(),session.getClientType(),session.getImei()));
+            if (b) {
+                list.add(new ClientInfo(session.getAppId(), session.getClientType(), session.getImei()));
             }
         }
         return list;
     }
 
-    public void sendToUser(String toId, Integer clientType,String imei, Command command, Object data, Integer appId){
-        if(clientType != null && StringUtils.isNotBlank(imei)){
+    public void sendToUser(String toId, Integer clientType, String imei, Command command, Object data, Integer appId) {
+        if (clientType != null && StringUtils.isNotBlank(imei)) {
             ClientInfo clientInfo = new ClientInfo(appId, clientType, imei);
-            sendToUserExceptClient(toId,command,data,clientInfo);
-        }else{
-            sendToUser(toId,command,data,appId);
+            sendToUserExceptClient(toId, command, data, clientInfo);
+        } else {
+            sendToUser(toId, command, data, appId);
         }
     }
 
     //发送给某个用户的指定客户端
-    public void sendToUser(String toId, Command command, Object data, ClientInfo clientInfo){
-        UserSession userSession = userSessionUtils.getUserSession(clientInfo.getAppId(), toId, clientInfo.getClientType(),
-                clientInfo.getImei());
-        sendPack(toId,command,data,userSession);
+    public void sendToUser(String toId, Command command, Object data, ClientInfo clientInfo) {
+        UserSession userSession =
+                userSessionUtils.getUserSession(clientInfo.getAppId(), toId, clientInfo.getClientType(), clientInfo.getImei());
+        sendPack(toId, command, data, userSession);
     }
 
     private boolean isMatch(UserSession sessionDto, ClientInfo clientInfo) {
@@ -98,13 +96,11 @@ public class MessageProducer {
     }
 
     //发送给除了某一端的其他端
-    public void sendToUserExceptClient(String toId, Command command, Object data, ClientInfo clientInfo){
-        List<UserSession> userSession = userSessionUtils
-                .getUserSession(clientInfo.getAppId(),
-                        toId);
+    public void sendToUserExceptClient(String toId, Command command, Object data, ClientInfo clientInfo) {
+        List<UserSession> userSession = userSessionUtils.getUserSession(clientInfo.getAppId(), toId);
         for (UserSession session : userSession) {
-            if(!isMatch(session,clientInfo)){
-                sendPack(toId,command,data,session);
+            if (!isMatch(session, clientInfo)) {
+                sendPack(toId, command, data, session);
             }
         }
     }

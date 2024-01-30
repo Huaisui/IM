@@ -49,7 +49,7 @@ import java.util.stream.Collectors;
 /**
  * @description:
  * @author: teo
- * @version: 1.0
+ *  
  */
 @Service
 public class ImFriendServiceImpl implements ImFriendService {

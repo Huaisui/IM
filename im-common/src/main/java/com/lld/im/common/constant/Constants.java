@@ -3,7 +3,7 @@ package com.lld.im.common.constant;
 /**
  * @description:
  * @author: teo
- * @version: 1.0
+ *  
  */
 public class Constants {
 

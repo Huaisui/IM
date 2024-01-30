@@ -12,7 +12,7 @@ import java.util.concurrent.TimeoutException;
 /**
  * @description:
  * @author: teo
- * @version: 1.0
+ *  
  */
 public class MqFactory {
 

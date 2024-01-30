@@ -6,7 +6,7 @@ import org.I0Itec.zkclient.ZkClient;
 /**
  * @description:
  * @author: teo
- * @version: 1.0
+ *
  */
 public class ZKit {
 

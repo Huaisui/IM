@@ -8,7 +8,7 @@ import javax.validation.constraints.NotBlank;
 /**
  * @description:
  * @author: teo
- * @version: 1.0
+ *  
  */
 @Data
 public class GetFriendShipRequestReq extends RequestBase {

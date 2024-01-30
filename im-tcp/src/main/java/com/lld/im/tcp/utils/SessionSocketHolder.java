@@ -25,7 +25,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * @description: 以 Dto 为 key 存放 NioSocketChannel
  * @author: teo
- * @version: 1.0
+ *  
  */
 public class SessionSocketHolder {
 

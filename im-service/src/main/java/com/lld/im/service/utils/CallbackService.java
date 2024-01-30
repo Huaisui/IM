@@ -14,7 +14,7 @@ import java.util.Map;
 /**
  * @description:
  * @author: teo
- * @version: 1.0
+ *  
  */
 @Component
 public class CallbackService {
@@ -31,24 +31,24 @@ public class CallbackService {
     ShareThreadPool shareThreadPool;
 
 
-    public void callback(Integer appId,String callbackCommand,String jsonBody){
+    public void callback(Integer appId, String callbackCommand, String jsonBody) {
         shareThreadPool.submit(() -> {
             try {
-                httpRequestUtils.doPost(appConfig.getCallbackUrl(),Object.class,builderUrlParams(appId,callbackCommand),
-                        jsonBody,null);
-            }catch (Exception e){
-                logger.error("callback 回调{} : {}出现异常 ： {} ",callbackCommand , appId, e.getMessage());
+                httpRequestUtils.doPost(appConfig.getCallbackUrl(), Object.class,
+                        builderUrlParams(appId, callbackCommand), jsonBody, null);
+            } catch (Exception e) {
+                logger.error("callback 回调{} : {}出现异常 ： {} ", callbackCommand, appId, e.getMessage());
             }
         });
     }
 
-    public ResponseVO beforeCallback(Integer appId,String callbackCommand,String jsonBody){
+    public ResponseVO beforeCallback(Integer appId, String callbackCommand, String jsonBody) {
         try {
-            ResponseVO responseVO = httpRequestUtils.doPost("", ResponseVO.class, builderUrlParams(appId, callbackCommand),
-                    jsonBody, null);
+            ResponseVO responseVO =
+                    httpRequestUtils.doPost("", ResponseVO.class, builderUrlParams(appId, callbackCommand), jsonBody, null);
             return responseVO;
-        }catch (Exception e){
-            logger.error("callback 之前 回调{} : {}出现异常 ： {} ",callbackCommand , appId, e.getMessage());
+        } catch (Exception e) {
+            logger.error("callback 之前 回调{} : {}出现异常 ： {} ", callbackCommand, appId, e.getMessage());
             return ResponseVO.successResponse();
         }
     }
@@ -59,6 +59,4 @@ public class CallbackService {
         map.put("command", command);
         return map;
     }
-
-
 }

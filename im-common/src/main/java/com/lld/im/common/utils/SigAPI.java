@@ -21,7 +21,7 @@ import java.util.zip.Inflater;
  *
  * 10000 xxx 10001 bbbb
  * @author: teo
- * @version: 1.0
+ *  
  */
 public class SigAPI {
     final private long appId;

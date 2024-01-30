@@ -16,16 +16,16 @@ import org.apache.commons.lang3.StringUtils;
 import java.io.IOException;
 
 /**
- * @description:
+ * @description: 接收来自 Service 层的消息，转发给客户端
  * @author: teo
- * @version: 1.0
+ *
  */
 @Slf4j
 public class MessageReciver {
 
     private static String brokerId;
 
-    private static void startReciverMessage() {
+    private static void startReceiveMessage() {
         try {
             Channel channel = MqFactory.getChannel(Constants.RabbitConstants.MESSAGE_SERVICE_TO_IM + brokerId);
             channel.queueDeclare(Constants.RabbitConstants.MESSAGE_SERVICE_TO_IM + brokerId,
@@ -58,13 +58,13 @@ public class MessageReciver {
     }
 
     public static void init() {
-        startReciverMessage();
+        startReceiveMessage();
     }
 
     public static void init(String brokerId) {
         if (StringUtils.isBlank(MessageReciver.brokerId)) {
             MessageReciver.brokerId = brokerId;
         }
-        startReciverMessage();
+        startReceiveMessage();
     }
 }

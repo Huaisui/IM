@@ -17,7 +17,7 @@ import java.io.PrintWriter;
 /**
  * @description:
  * @author: teo
- * @version: 1.0
+ *  
  */
 @Component
 public class GateWayInterceptor implements HandlerInterceptor {

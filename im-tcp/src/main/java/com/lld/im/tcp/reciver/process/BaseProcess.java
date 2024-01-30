@@ -7,7 +7,7 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 /**
  * @description:
  * @author: teo
- * @version: 1.0
+ *  
  */
 public abstract class BaseProcess {
 

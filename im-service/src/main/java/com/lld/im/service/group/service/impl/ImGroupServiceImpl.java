@@ -46,7 +46,7 @@ import java.util.UUID;
 /**
  * @description:
  * @author: teo
- * @version: 1.0
+ *  
  */
 @Service
 public class ImGroupServiceImpl implements ImGroupService {

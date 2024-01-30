@@ -7,7 +7,7 @@ import sun.dc.pr.PRError;
 /**
  * @description:
  * @author: teo
- * @version: 1.0
+ *  
  */
 @Data
 public class MessageReciveAckContent extends ClientInfo {

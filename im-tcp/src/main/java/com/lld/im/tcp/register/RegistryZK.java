@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 /**
  * @description:
  * @author: teo
- * @version: 1.0
+ *  
  */
 public class RegistryZK implements Runnable {
 

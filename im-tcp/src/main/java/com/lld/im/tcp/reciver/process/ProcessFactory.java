@@ -3,7 +3,7 @@ package com.lld.im.tcp.reciver.process;
 /**
  * @description:
  * @author: teo
- * @version: 1.0
+ *  
  */
 public class ProcessFactory {
 
